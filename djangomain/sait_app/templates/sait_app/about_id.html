@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ title }} {% endblock %}
+{% block body %}
+{% include "fast_app1/includes/include_nav.html"  %}
+{% now "SHORT_DATETIME_FORMAT" %}
+<div>
+    <h1>СТРАНИЦА ABOUT_ID {{ about_id }}</h1>
+    {% for item in data_db %}
+    {% if item.id == about_id %}
+    <h2>{{ item.name|title }}a</h2>
+    <h2>{{ item.content}}</h2>
+    <h2>{{ item.book}}</h2>
+    <img src="{% static item.img %}" alt="картинка">
+    {% endif %}
+    {% endfor %}
+</div>
+{% lorem 5 p random %}
+{% endblock %}
+

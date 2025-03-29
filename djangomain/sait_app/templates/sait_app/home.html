@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tag_sait %}
+{% block title %} {{ title|capfirst }} {% endblock %}
+{% block body %}
+<!--    style="font-size: 120%; font-family: monospace; color: #cf77cc"-->
+<div class="first_object">
+    <h1> ЭТО ДОМАШНЯЯ СТРАНИЦА </h1>
+    <div>
+        <h1>Добро пожаловать!</h1>
+        {% if user.is_authenticated %}
+        <p>Вы вошли как {{ user.email }}</p>
+        {% else %}
+        <p>Пожалуйста, войдите или зарегистрируйтесь.</p>
+        {% endif %}
+    </div>
+    <div>
+        <img src="{% static 'sait_app/images/Tegos_podbor_0194.jpg' %}" alt="frog1">
+        <img src="{% static 'sait_app/images/Tegos_podbor_0198.jpg' %}" alt="frog2">
+        <img src="{% static 'sait_app/images/Tegos_podbor_0199.jpg' %}" alt="frog3">
+    </div>
+</div>
+<div>
+    <ul>
+        {% for item in author_table %}
+        <li>
+            <h1>{{item.first_name|title}} {{item.last_name|title }}</h1>
+            <a href="{{ item.get_absolut_url }}">подробнее</a>
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% inclusion_paginator %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load tag_sait %}
+{% block title %} {{title}} {% endblock title %}
+{% block body %}
+<h1> ЭТО СТРАНИЦА TAG - {{ tag_name }}</h1>
+<div>
+    <ul>
+    {% for item in select_author %}
+        <h2><li>{{ item.first_name|title }} {{ item.last_name|title }}</li></h2>
+        <a href="{{ item.get_absolut_url }}">подробнее</a>
+    {% endfor %}
+    </ul>
+</div>
+{% inclusion_paginator %}
+{% endblock body %}

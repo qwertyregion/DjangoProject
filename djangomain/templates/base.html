@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+{% load tag_sait %}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+    </style>
+    <link type="text/css" href="{% static 'sait_app/css/style.css' %}" rel="stylesheet">
+	<title>{% block title %}Title{% endblock %}</title>
+</head>
+<body>
+<nav>
+    {% if user.is_authenticated %}
+        <span>Привет, пользователь : {{ user.username }}, почта : ({{ user.email }})</span> |
+    <a href="{% url 'users_app:logout' %}">Выйти</a>
+    {% else %}
+        <a href="{% url 'users_app:login' %}">Войти</a> |
+        <a href="{% url 'users_app:register' %}">Регистрация</a>
+    {% endif %}
+</nav>
+<div>
+    {% list_menu as menu %}
+    {% for item in menu %}
+    <h1>
+        <a href="{% url item.url_name %}"> {{item.name}} </a>
+    </h1>
+    {% if forloop.last %}
+    <hr>
+    {% endif %}
+    {% endfor %}
+</div>
+{% list_publisher %}
+{% list_tag %}
+{% block body %}
+    <h1>block body</h1>
+{% endblock %}
+
+</body>
+</html>
+
+<!--<br><br><hr>-->
+<!--<div class="pagination">-->
+<!--    <div class="current">-->
+<!--        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    <div class="step-links">-->
+<!--        {% if page_obj.has_previous %}-->
+<!--            <a href="?page=1">&laquo; first</a>-->
+<!--            <a href="?page={{ page_obj.previous_page_number }}">previous</a>-->
+<!--        {% endif %}-->
+
+<!--        {% for item in paginator.page_range %}-->
+<!--            <a href="?page={{ item }}"> {{ item }} </a>-->
+<!--        {% endfor %}-->
+
+
+
+<!--        {% if page_obj.has_next %}-->
+<!--            <a href="?page={{ page_obj.next_page_number }}">next</a>-->
+<!--            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+<!--</div>-->
+
+

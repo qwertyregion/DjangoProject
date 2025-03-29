@@ -1,0 +1,10 @@
+<ul>
+    {% for item in tag_table %}
+    <li>
+        <h2><a href="{{item.get_absolut_url}}"> {{item.tag}} </a></h2>
+    </li>
+    {% if forloop.last %}
+    <hr>
+    {% endif %}
+    {% endfor %}
+</ul>

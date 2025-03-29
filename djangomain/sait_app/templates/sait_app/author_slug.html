@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ title }} {% endblock %}
+{% block body %}
+{% load static %}
+    <h1>АВТОР {{author_objects.first_name|title}} {{author_objects.last_name|title}} </h1>
+    <h1>{{author_objects.first_name|title}} {{author_objects.last_name|title}}</h1>
+{% if author_objects.photo_author %}
+    <div>
+        <img src="{{ author_objects.photo_author.url }}">
+    </div>
+    <p> # {{ author_objects.tag.tag }} </p>
+    <p>slug: {{author_objects.slug}}</p>
+{% endif %}
+{% endblock %}

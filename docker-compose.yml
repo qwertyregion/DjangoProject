@@ -1,0 +1,37 @@
+#version: 'v2.33.1-desktop.1'
+
+services:
+  web:
+    build: .
+    container_name: django-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fast_main:/app
+    environment:
+      - DATABASE_URL=postgres://postgres:qwerty@db:5432/fast_db
+    command: sh -c "python manage.py migrate && gunicorn fast_main.wsgi:application --bind 0.0.0.0:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    container_name: postgres-container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=fast_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

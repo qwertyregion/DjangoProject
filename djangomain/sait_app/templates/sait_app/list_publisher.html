@@ -1,0 +1,13 @@
+<ul>
+    {% for item in publisher_table %}
+    <li>
+        <h2><a href="{{item.get_absolut_url}}"> {{item.publisher_name}} </a></h2>
+        {% if forloop.last %}
+        <hr>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+
+

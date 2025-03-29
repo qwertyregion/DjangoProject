@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock title %}
+{% block body %}
+    <h1> СТРАНИЦА РЕГИСТРАЦИИ </h1>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="error">{{ form.non_field_errors }}</div>
+    {% endif %}
+    {% for item in form %}
+    <p>
+        <label for="{{item.id_for_label}}"> {{ item.label }}: </label>
+        {{ item }}
+        <small>   {{ item.help_text }}</small>
+    </p>
+    {% if item.errors %}
+    <div class="error">{{ item.errors }}</div>
+    {% endif %}
+    {% endfor %}
+    <input type="submit" value="Submit">
+    </form>
+
+    <p>Уже есть аккаунт? <a href="{% url 'users_app:login' %}">Войдите</a></p>
+
+<!--    <form method="post">-->
+<!--        {% csrf_token %}-->
+<!--        {{ form.as_p }}-->
+<!--        <button type="submit">Зарегистрироваться</button>-->
+<!--    </form>-->
+{% endblock %}
+
+
+
