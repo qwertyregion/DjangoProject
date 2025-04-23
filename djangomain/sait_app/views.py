@@ -2,6 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseForbidden
+
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
 from django.urls import reverse, reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.db.models.query_utils import Q
@@ -16,6 +20,7 @@ from django.views.generic import TemplateView, ListView, FormView, DetailView
 from sait_app.utils import DataMixin
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')  # Кэшировать на 15 минут
 class HomeView(DataMixin, ListView):
     model = Author
     template_name = 'sait_app/home.html'

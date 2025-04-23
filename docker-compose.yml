@@ -1,4 +1,4 @@
-#version: 'v2.33.1-desktop.1'
+
 
 services:
   web:
@@ -7,11 +7,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./fast_main:/app
+      - ./djangomain:/app
     environment:
-      - DATABASE_URL=postgres://postgres:qwerty@db:5432/fast_db
-    command: sh -c "python manage.py migrate && gunicorn fast_main.wsgi:application --bind 0.0.0.0:8000"
+      - DATABASE_URL=postgres://postgres:qwerty@db:5432/gjango_db
+      - REDIS_HOST=redis
+    command: sh -c "python manage.py migrate && gunicorn main_app.wsgi:application --bind 0.0.0.0:8000"
     depends_on:
+      redis:
+        condition: service_healthy
       db:
         condition: service_healthy
 
@@ -23,7 +26,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=qwerty
-      - POSTGRES_DB=fast_db
+      - POSTGRES_DB=gjango_db
     ports:
       - "5432:5432"
     healthcheck:
@@ -32,6 +35,32 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redisdata:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./users.acl:/usr/local/etc/redis/users.acl:ro
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+
 volumes:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local

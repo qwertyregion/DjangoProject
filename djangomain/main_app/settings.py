@@ -29,17 +29,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', ]
 
-# INTERNAL_IPS = ['localhost', ]
-INTERNAL_IPS = ['127.0.0.1', ]
-
 AUTH_USER_MODEL = 'users_app.CustomUser'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/users/login/'
 
-# EMAIL settings
-
+# -----------EMAIL settings------------
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -49,8 +45,10 @@ EMAIL_HOST_USER = 'qwertyregion05@gmail.com'
 EMAIL_HOST_PASSWORD = 'uzhz cycr gfih enzy'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # Отправитель по умолчанию
 SERVER_EMAIL = EMAIL_HOST_USER
-EMAIL_ADMIN = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST
 
+# ---------DEBUG_TOOLBAR--------
+INTERNAL_IPS = ['127.0.0.1', ]
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -64,8 +62,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'sait_app.apps.SaitAppConfig',
     'users_app.apps.UsersUppConfig',
-
-
 ]
 
 MIDDLEWARE = [
@@ -107,7 +103,7 @@ WSGI_APPLICATION = 'main_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
+# ------------------POSTGRES---------------
 DATABASES = {
     # 'default': dj_database_url.config(default='postgres://postgres:qwerty@db:5432/fast_db'),
     'default': {
@@ -115,15 +111,31 @@ DATABASES = {
         'NAME': 'gjango_db',
         'USER': 'postgres',
         'PASSWORD': 'qwerty',
-        'HOST': '127.0.0.1',   #db
+        'HOST': '127.0.0.1',   #  db
         'PORT': '5432',
         'CONN_MAX_AGE': 0,      #закрывать соединение после каждого запроса
     }
 }
-print("DATABASE_URL:", os.environ.get("DATABASE_URL"))  # если DATABASE_URL: postgres://postgres:qwerty@db:5432/fast_db
-                                                        # то верно
+
+# ------------------REDIS---------------
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/1",  # 1 — номер базы данных Redis для запуска с docker-compose localhost+redis
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        'KEY_PREFIX': 'django_project',  # Префикс для ключей, чтобы избежать конфликтов
+        'TIMEOUT': 3600,  # Время жизни кэша в секундах (1 час), можно отключить, установив None
 
 
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+# ------------------LOGING---------------
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
