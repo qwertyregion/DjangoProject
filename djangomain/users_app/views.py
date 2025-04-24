@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
+from django.db.utils import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -27,7 +28,13 @@ class RegisterView(CreateView):
             user = form.save(commit=False)
             print(f"Пользователь сохранён: {user.email}")
             user.is_active = False
-            user.save()
+            # user.save()
+
+            try:
+                user.save()
+            except IntegrityError:
+                form.add_error(None, "Ошибка: пользователь с таким ID уже существует.")
+                return self.form_invalid(form)
 
             token = default_token_generator.make_token(user)
             print(f"Generated token: {token}")

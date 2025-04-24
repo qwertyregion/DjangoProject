@@ -111,7 +111,7 @@ DATABASES = {
         'NAME': 'gjango_db',
         'USER': 'postgres',
         'PASSWORD': 'qwerty',
-        'HOST': '127.0.0.1',   #  db
+        'HOST': 'db',   #  127.0.0.1
         'PORT': '5432',
         'CONN_MAX_AGE': 0,      #закрывать соединение после каждого запроса
     }
