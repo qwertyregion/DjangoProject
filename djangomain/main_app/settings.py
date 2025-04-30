@@ -111,7 +111,7 @@ DATABASES = {
         'NAME': 'gjango_db',
         'USER': 'postgres',
         'PASSWORD': 'qwerty',
-        'HOST': 'db',   #  127.0.0.1
+        'HOST': '127.0.0.1',   #  db
         'PORT': '5432',
         'CONN_MAX_AGE': 0,      #закрывать соединение после каждого запроса
     }
@@ -121,7 +121,7 @@ DATABASES = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/1",  # 1 — номер базы данных Redis для запуска с docker-compose localhost+redis
+        "LOCATION": "redis://localhost:6379/1",  # 1 — номер базы данных Redis для запуска с docker-compose localhost=redis
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -131,9 +131,19 @@ CACHES = {
 
     }
 }
-
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+
+# ---------------CELERY CONFIGURATIONS OPTIONS---------------
+CELERY_TIMEZONE = None
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 
 # ------------------LOGING---------------
 LOGGING = {
