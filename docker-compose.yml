@@ -54,10 +54,20 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    restart: unless-stopped
+    restart: on-failure
     tty: true
     stdin_open: true
 
+  celery:
+    build: .
+    container_name: celery-container
+    depends_on:
+      - redis
+    volumes:
+      - ./logs:/var/log  # Для сохранения логов
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
 
 volumes:
   postgres_data:

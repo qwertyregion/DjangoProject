@@ -1,5 +1,7 @@
 django-redis==5.4.0
 redis==5.0.8
+celery==5.2.7
+importlib-metadata==4.13.0
 wcwidth==0.2.13
 typing-extensions==4.7.1
 traitlets==5.9.0
